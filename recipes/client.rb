@@ -77,6 +77,21 @@ template "#{splunk_dir}/etc/system/local/inputs.conf" do
   not_if { node['splunk']['inputs_conf'].nil? || node['splunk']['inputs_conf']['host'].empty? }
 end
 
+template "#{splunk_dir}/etc/system/local/deploymentclient.conf" do
+  source 'deploymentclient.conf.erb'
+  owner splunk_runas_user
+  group splunk_runas_user
+  mode '644'
+  variables deploymentclient_conf: node['splunk']['deploymentclient_conf']
+  notifies :restart, 'service[splunk]' unless disabled?
+unless node['splunk']['deploymentclient_conf']['client']['endpoint'].nil? &&
+  node['splunk']['deploymentclient_conf']['server']['targetUri'].nil?
+  action :create
+else
+  action :delete
+end
+end
+
 splunk_app 'chef_splunk_universal_forwarder' do
   files_mode '0644'
   remote_directory 'chef_splunk_universal_forwarder'

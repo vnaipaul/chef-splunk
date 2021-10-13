@@ -1,0 +1,12 @@
+<% @deploymentclient_conf.each do |section_key, section_val| -%>
+  <% if section_key == 'client' %>
+[deployment-client]
+  <% elsif section_key == 'server' %>
+[target-broker:deploymentServer]
+  <% else %>
+[<%= section_key %>]
+  <% end %>
+  <% section_val.each do |k, v| -%>
+<%= k %> = <%= v %>
+  <% end %>
+<% end %>

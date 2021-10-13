@@ -89,6 +89,20 @@ default['splunk']['outputs_conf'] = {
 default['splunk']['inputs_conf']['host'] = ''
 default['splunk']['inputs_conf']['ports'] = []
 
+# Add key-value pairs to each section for the deploymentclient.conf file
+# Note: the file is removed if both [endpoint] and [targetUri] remain nil
+default['splunk']['deploymentclient_conf'] = {
+  'default' => {                # [default]
+  },
+  'client' => {                 # [deployment-client]
+    'disabled' => 'false',
+    'endpoint' => nil,
+  },
+  'server' => {                 # [target-broker:deploymentServer]
+    'targetUri' => nil,
+  }
+}
+
 # If the `is_server` attribute is set (via an overridable location
 # like a role), then set particular attribute defaults based on the
 # server, rather than Universal Forwarder. We hardcode the path
